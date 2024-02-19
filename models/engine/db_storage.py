@@ -1,5 +1,5 @@
 
-from sqlalchemy import (create_engine)
+from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import BaseModel, Base
 from models.user import User
@@ -10,6 +10,7 @@ from models.amenity import Amenity
 from models.review import Review
 import os
 class DBStorage():
+    """ DBStorage Class """
     __engine = None
     __session = None
 
@@ -75,3 +76,8 @@ class DBStorage():
 
         # Create a scoped session to ensure thread safety
         self.__session = scoped_session(session_factory)
+
+    def close(self):
+        """ close method """
+        if self.__session:
+            self.__session.close()
