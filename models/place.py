@@ -62,7 +62,7 @@ class Place(BaseModel, Base):
             amenities = []
             amenities_list = models.storage.all("Amenity")
             for amenity in amenities_list.values():
-                if self.id == amenity.place_id:
+                if self.id == amenity.amenity_ids:
                     amenities.append(amenity)
             return amenities
         
