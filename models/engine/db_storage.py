@@ -39,7 +39,7 @@ class DBStorage():
 
         # Define a list of classes to query if cls is None
         # all_classes = [User, State, City, Amenity, Place, Review]
-        all_classes = [State, City, User]
+        all_classes = [State, City, User, Place]
 
         # Query objects based on the specified class name or all classes
         objects = []
