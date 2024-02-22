@@ -9,6 +9,8 @@ from models.city import City
 from models.amenity import Amenity
 from models.review import Review
 import os
+
+
 class DBStorage():
     """ DBStorage Class """
     __engine = None
@@ -21,7 +23,9 @@ class DBStorage():
         mysql_db = os.environ.get("HBNB_MYSQL_DB")
 
         # Construct database URL
-        dbURL = f"mysql+mysqldb://{mysql_user}:{mysql_password}@{mysql_host}/{mysql_db}"
+        dbURL = ("mysql+mysqldb://{}:{}@{}/{}".format(
+            mysql_user, mysql_password, mysql_host, mysql_db
+        ))
 
         # Create database engine with connection pooling and pre-ping
         self.__engine = create_engine(dbURL, pool_pre_ping=True)
@@ -29,25 +33,32 @@ class DBStorage():
         # Drop tables if environment is set to test
         if os.environ.get("HBNB_ENV") == "test":
             Base.metadata.drop_all(self.__engine)
-    
+
     def all(self, cls=None):
         """Query objects from the database session"""
 
         # Define a list of classes to query if cls is None
-        all_classes = [User, State, City, Amenity, Place, Review]
+        # all_classes = [User, State, City, Amenity, Place, Review]
+        all_classes = [State, City]
 
         # Query objects based on the specified class name or all classes
+        objects = []
         if cls is None:
-            objects = []
             for class_ in all_classes:
-                objects.extend(self.__session.query(class_).all())
+                query = self.__session.query(class_).all()
+                for obj in query:
+                    objects.append(obj)
         else:
-            objects = self.__session.query(cls).all()
+            query = self.__session.query(cls).all()
+            for obj in query:
+                objects.append(obj)
 
         # Construct dictionary with class name and object ID as key
         object_dict = {}
         for obj in objects:
-            key = f"{obj.__class__.__name__}.{obj.id}"
+            key = ("{}.{}".format(
+                obj.__class__.__name__, obj.id
+            ))
             object_dict[key] = obj
 
         return object_dict

@@ -21,6 +21,7 @@ class State(BaseModel, Base):
         @property
         def cities(self):
             """Getter attribute to retrieve cities associated with state"""
+            from models import storage
             cities = []
             citiesList = storage.all("City")  # Retrieve all City instances
             for city in citiesList.values():
