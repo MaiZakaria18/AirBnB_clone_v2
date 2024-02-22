@@ -66,6 +66,7 @@ class FileStorage:
     Returns:
         None
         """
-        if obj:
-            obj = obj.to_dict()['__class__'] + '.' + obj.to_dict()['id']
-            del FileStorage.__objects[obj]
+        def delete(self, obj=None):
+            """Delete a given object from __objects, if it exists"""
+            if obj:
+                del self.__objects["{}.{}".format(type(obj).__name__, obj.id)]
