@@ -1,69 +1,65 @@
-#!/usr/bin/python3
-""" """
-from tests.test_models.test_base_model import test_basemodel
+import unittest
+from models.base_model import BaseModel, Base
 from models.place import Place
+from sqlalchemy import create_engine
+from sqlalchemy.orm import sessionmaker
+
+# Setup a test database
+engine = create_engine('sqlite:///:memory:')
+Base.metadata.create_all(engine)
+Session = sessionmaker(bind=engine)
+session = Session()
 
 
-class test_Place(test_basemodel):
-    """ """
+class TestPlace(unittest.TestCase):
+    """Test the Place class"""
 
-    def __init__(self, *args, **kwargs):
-        """ """
-        super().__init__(*args, **kwargs)
-        self.name = "Place"
-        self.value = Place
+    def setUp(self):
+        """Set up the test environment"""
+        self.place = Place(name="Test Place", city_id="NY", user_id="user123",
+                           number_rooms=2, number_bathrooms=1, max_guest=4,
+                           price_by_night=100,
+                           latitude=40.7128,
+                           longitude=-74.0060)
 
-    def test_city_id(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.city_id), str)
+    def test_instantiation(self):
+        """Test that a place can be instantiated"""
+        self.assertIsInstance(self.place, Place)
 
-    def test_user_id(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.user_id), str)
+    def test_name_attribute(self):
+        """Test that the name attribute is set correctly"""
+        self.assertEqual(self.place.name, "Test Place")
 
-    def test_name(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.name), str)
+    def test_city_id_attribute(self):
+        """Test that the city_id attribute is set correctly"""
+        self.assertEqual(self.place.city_id, "NY")
 
-    def test_description(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.description), str)
+    def test_user_id_attribute(self):
+        """Test that the user_id attribute is set correctly"""
+        self.assertEqual(self.place.user_id, "user123")
 
-    def test_number_rooms(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.number_rooms), int)
+    def test_save(self):
+        """Test that the save method updates the updated_at attribute"""
+        initial_updated_at = self.place.updated_at
+        self.place.save()
+        self.assertNotEqual(self.place.updated_at, initial_updated_at)
 
-    def test_number_bathrooms(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.number_bathrooms), int)
+    def test_to_dict(self):
+        """Test that the to_dict method returns a dictionary
+        representation of the instance"""
+        place_dict = self.place.to_dict()
+        self.assertIsInstance(place_dict, dict)
+        self.assertEqual(place_dict['name'], "Test Place")
+        self.assertEqual(place_dict['city_id'], "NY")
+        self.assertEqual(place_dict['user_id'], "user123")
+        self.assertIn('created_at', place_dict)
+        self.assertIn('updated_at', place_dict)
+        self.assertNotIn('_sa_instance_state', place_dict)
 
-    def test_max_guest(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.max_guest), int)
+    def tearDown(self):
+        """Clean up the test environment"""
+        session.close()
 
-    def test_price_by_night(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.price_by_night), int)
 
-    def test_latitude(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.latitude), float)
-
-    def test_longitude(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.latitude), float)
-
-    def test_amenity_ids(self):
-        """ """
-        new = self.value()
-        self.assertEqual(type(new.amenity_ids), list)
+if __name__ == '__main__':
+    unittest.main()

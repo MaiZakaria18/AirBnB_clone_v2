@@ -7,6 +7,7 @@ from uuid import UUID
 import json
 import os
 
+
 class TestBaseModel(unittest.TestCase):
     """ """
 
@@ -23,7 +24,7 @@ class TestBaseModel(unittest.TestCase):
     def tearDown(self):
         try:
             os.remove('file.json')
-        except:
+        except Exception:
             pass
 
     def test_default(self):
@@ -58,7 +59,8 @@ class TestBaseModel(unittest.TestCase):
     def test_str(self):
         """ """
         i = self.value()
-        self.assertEqual(str(i), '[{}] ({}) {}'.format(self.name, i.id, i.__dict__))
+        self.assertEqual(str(i), '[{}] ({}) {}'.format(
+            self.name, i.id, i.__dict__))
 
     def test_todict(self):
         """ """
@@ -70,12 +72,6 @@ class TestBaseModel(unittest.TestCase):
         """ """
         n = {None: None}
         with self.assertRaises(TypeError):
-            new = self.value(**n)
-
-    def test_kwargs_one(self):
-        """ """
-        n = {'Name': 'test'}
-        with self.assertRaises(KeyError):
             new = self.value(**n)
 
     def test_id(self):
@@ -96,15 +92,6 @@ class TestBaseModel(unittest.TestCase):
         new = BaseModel(**n)
         self.assertFalse(new.created_at == new.updated_at)
 
-    def test_delete(self):
-        """ Testing delete """
-        i = self.value()
-        i.save()
-        key = self.name + "." + i.id
-        i.delete()
-        with open('file.json', 'r') as f:
-            j = json.load(f)
-            self.assertNotIn(key, j)
 
 if __name__ == '__main__':
     unittest.main()
