@@ -8,11 +8,11 @@ from datetime import datetime
 
 def do_pack():
     """fabric function"""
-    tgz_name = datetime.now().strftime("%Y%m%d%H%M%S")
+    tgzName = datetime.now().strftime("%Y%m%d%H%M%S")
     local("mkdir -p versions")
     result = local("tar -cvz web_static -f versions/web_static_{}.tgz".format(
-        tgz_name))
+        tgzName))
     if result.succeeded:
-        return tgz_name
+        return tgzName
     else:
         return None

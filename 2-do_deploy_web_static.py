@@ -6,7 +6,7 @@ from fabric.api import put, run, env
 import os
 
 
-env.hosts = ['100.24.242.177', '54.165.77.224']
+env.hosts = ['54.237.37.1', '54.145.80.76']
 def do_deploy(archive_path):
     """fabric function"""
     if os.path.exists(archive_path) == False:
