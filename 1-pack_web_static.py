@@ -10,5 +10,8 @@ def do_pack():
     """fabric function"""
     tgz_name = datetime.now().strftime("%Y%m%d%H%M%S")
     local("mkdir versions")
-    result = local("tar -c web_static -f versions/web_static_{}.tgz".format(tgz_name))
-    return (tgz_name)    
+    result = local("tar -cvz web_static -f versions/web_static_{}.tgz".format(tgz_name))
+    if result.succeeded:
+        return tgz_name
+    else:
+        return None
