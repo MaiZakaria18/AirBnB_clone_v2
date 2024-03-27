@@ -1,4 +1,7 @@
-un an app with Flask web framework
+#!/usr/bin/python3
+
+"""
+run app with Flask web framework
 """
 
 from flask import Flask
