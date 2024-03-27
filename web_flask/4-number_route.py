@@ -1,6 +1,4 @@
-#!/usr/bin/python3
-"""
-Run an app with Flask web framework
+un an app with Flask web framework
 """
 
 from flask import Flask
@@ -10,7 +8,7 @@ myApp = Flask(__name__)
 
 @myApp.route("/", strict_slashes=False)
 def homepage():
-   return "Hello HBNB!"
+    return "Hello HBNB!"
 
 
 @myApp.route("/hbnb", strict_slashes=False)
@@ -31,5 +29,11 @@ def text_variable(text="is_cool"):
     return f"python {text}"
 
 
+@myApp.route('/number/<int:n>', strict_slashes=False)
+def number(n):
+    return '{} is a number'.format(n)
+
+
 if __name__ == "__main__":
     myApp.run(host='0.0.0.0', port=5000)
+
