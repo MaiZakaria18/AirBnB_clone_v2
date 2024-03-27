@@ -1,4 +1,4 @@
-
+#!/usr/bin/python3
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker, scoped_session
 from models.base_model import BaseModel, Base
@@ -86,12 +86,9 @@ class DBStorage():
             bind=self.__engine, expire_on_commit=False)
 
         # Create a scoped session to ensure thread safety
-        Session = scoped_session(session_factory)
-        self.__session = Session()
+        self.__session = scoped_session(session_factory)
 
     def close(self):
-        """
-        Because SQLAlchemy doesn't reload his `Session`
-        when it's time to insert new data, we force it to!
-        """
-        self.__session.close()
+        """remove the session for reloading data"""
+        if self.__session:
+            self.__session.remove()
