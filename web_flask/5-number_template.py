@@ -1,10 +1,9 @@
 #!/usr/bin/python3
-
 """
-run app with Flask web framework
+Run an app with Flask web framework
 """
 
-from flask import Flask
+from flask import Flask, render_template
 
 myApp = Flask(__name__)
 
@@ -35,6 +34,11 @@ def text_variable(text="is_cool"):
 @myApp.route('/number/<int:n>', strict_slashes=False)
 def number(n):
     return '{} is a number'.format(n)
+
+
+@myApp.route('/number_template/<int:n>', strict_slashes=False)
+def number_template(n):
+    return render_template("5-number.html", number=n)
 
 
 if __name__ == "__main__":
