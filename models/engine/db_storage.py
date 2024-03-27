@@ -86,9 +86,12 @@ class DBStorage():
             bind=self.__engine, expire_on_commit=False)
 
         # Create a scoped session to ensure thread safety
-        self.__session = scoped_session(session_factory)
+        Session = scoped_session(session_factory)
+        self.__session = Session()
 
     def close(self):
-        """ close method """
-        if self.__session:
-            self.__session.close()
+        """
+        Because SQLAlchemy doesn't reload his `Session`
+        when it's time to insert new data, we force it to!
+        """
+        self.__session.close()
