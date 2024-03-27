@@ -24,8 +24,8 @@ def textvariable(text):
     return f"C {text}"
 
 
-@myApp.route("/python/<text>", strict_slashes=False)
-def textvariable(text="is cool"):
+@myApp.route('/python/', defaults={'text': 'is_cool'}, strict_slashes=False)
+def textvariable(text):
     text = text.replace("_", " ")
     return f"python {text}"
 
