@@ -14,12 +14,13 @@ def dispose(exception):
     storage.close()
 
 
-@app.route('/states_list')
-def states():
+@app.route('/states/')
+@app.route('/states/<id>')
+def states_and_state(id=None):
     """ Display list of all the states """
-    states = storage.all(State)
-    states_list = list(states.values())
-    return render_template('7-states_list.html', states=states_list)
+    if id:
+        id = 'State.{}'.format(id)
+    return render_template('9-states.html', states=storage.all(State), id=id)
 
 
 if __name__ == '__main__':
